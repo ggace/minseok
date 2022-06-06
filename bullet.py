@@ -17,5 +17,3 @@ class Bullets(Sprite):
     def update_bullet(self):
         self.draw_bullet()
         self.rect.x -= self.user_settings.bullet_speed
-
-

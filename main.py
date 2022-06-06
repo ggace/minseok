@@ -1,27 +1,39 @@
 import pygame
 
-from settings import Settings
-import game_functions as f
-from ship import Ship
-from rectangle import Rect
-from pygame.sprite import Group
-from gamestat import Gamestat
+from pygame.sprite import Sprite
 
-def run_game():
-    pygame.init()
-    user_settings = Settings()
-    screen = pygame.display.set_mode((user_settings.screen_width, user_settings.screen_height))
-    pygame.display.set_caption('practice')
+class Rect(Sprite):
+    def __init__(self, user_settings, screen):
+        super().__init__()
+        self.user_settings = user_settings
+        self.screen = screen
 
-    ship = Ship(screen)
-    rect_obj = Rect(user_settings, screen)
-    bullets = Group()
-    stat = Gamestat()
+        self.screen_rect = self.screen.get_rect()
+        self.rect = pygame.Rect((0, 0), (user_settings.rect_width, user_settings.rect_height))
 
-    while True:
-        f.check_events(user_settings, screen, stat, ship, rect_obj, bullets)
-        stat.check_shots()
-        ship.check_flags(user_settings)
-        f.update_screen(user_settings, screen, stat, ship, rect_obj, bullets)
+        self.rect.centery = self.screen_rect.centery
+        self.rect.x = 50
 
-run_game()
+        self.y = float(self.rect.y)
+        self.move = self.user_settings.rect_move_speed
+
+    def update(self):
+        self.y += self.move
+        self.rect.y = self.y
+        self.check_edges()
+        self.draw_rect()
+
+    def change_direction(self):
+        self.move *= -1
+
+    def check_edges(self):
+        if self.rect.bottom >= self.screen_rect.bottom:
+            self.change_direction()
+            self.rect.x += 40
+
+        if self.rect.top <= 0:
+            self.change_direction()
+            self.rect.x -= 40
+
+    def draw_rect(self):
+        pygame.draw.rect(self.screen, self.user_settings.rect_color, self.rect)
