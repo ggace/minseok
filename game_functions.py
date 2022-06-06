@@ -18,9 +18,10 @@ def check_events(user_settings, screen, stat, button, ship, rect_obj, bullets, f
 
 def check_button(stat, button, mouse_x, mouse_y, ship, rect_obj):
     if button.rect.collidepoint(mouse_x, mouse_y) and not stat.game_active:
+        center_stuff(ship, rect_obj)
         stat.game_active = True
         stat.reset_stats()
-        center_stuff(ship, rect_obj)
+        
 
 def check_keydown_events(event, user_settings, screen, stat, ship, rect_obj, bullets, fin_bullet):
     if event.key == pygame.K_q:
@@ -70,11 +71,8 @@ def bullet_function(stat, rect_obj, bullets, fin_bullet):
             fin_bullet.remove(bullet)
 
 def center_stuff(ship, rect_obj):
-    ship.image_rect.centery = ship.screen_rect.centery
-    ship.image_rect.right = ship.screen_rect.right
-
-    rect_obj.rect.centery = rect_obj.screen_rect.centery
-    rect_obj.rect.x = 50
+    ship.rect = ship.startRectY
+    rect_obj.y = rect_obj.startRectY
 
 def update_screen(user_settings, screen, stat, button, ship, rect_obj, bullets, fin_bullet):
     screen.fill(user_settings.bg_color)

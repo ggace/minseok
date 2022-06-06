@@ -16,6 +16,7 @@ class Ship():
         self.moving_down = False
 
         self.rect = float(self.image_rect.y)
+        self.startRectY = self.rect
 
     def check_flags(self, user_settings):
         if self.moving_up and self.image_rect.top >= 0:
@@ -26,3 +27,4 @@ class Ship():
 
     def blit_me(self):
         self.screen.blit(self.image, self.image_rect)
+
